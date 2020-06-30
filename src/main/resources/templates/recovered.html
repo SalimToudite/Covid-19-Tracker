@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="template.html">
+<head>
+    <meta charset="utf-8">
+    <title>Deaths</title>
+</head>
+<body>
+<div layout:fragment="pageContent">
+    <div class="container-fluid">
+    <div class="jumbotron">
+        <div class="container-fluid">
+            <h2 class="display-4" th:text="${totalRecoveredCases}"></h2>
+            <p class="lead text-success">Total Recovered cases reported as of today.</p>
+            <hr class="my-3">
+
+            <p class="lead">
+                <span>Recovered cases reported since previous day:</span>
+                <span class="text-success" th:text="${totalNewCases}"></span>
+            </p>
+        </div>
+    </div>
+
+
+        <input class="form-control" placeholder="Search Country..."
+               aria-describedby="button-addon2" type="text" id="myInput">
+        <br>
+
+        <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+            <table class="table table-bordered table-striped ">
+                <thead>
+                <tr class="table-success text-secondary">
+                    <th >State</th>
+                    <th >Country</th>
+                    <th >Total Recovered Cases </th>
+                    <th >Changes since last day</th>
+                </tr>
+                </thead>
+                <tbody id="myTable">
+                <tr th:each="recovered : ${recoveredList}">
+                    <td th:text="${recovered.state}"></td>
+                    <td th:text="${recovered.country}"></td>
+                    <td th:text="${recovered.latestRecoveredCases}"></td>
+                    <td th:text="${recovered.diffFromPrevDay}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</div>
+</body>
+</html>

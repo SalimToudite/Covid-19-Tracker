@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="template.html">
+<head>
+    <meta charset="utf-8">
+    <title>Deaths</title>
+</head>
+<body>
+<div layout:fragment="pageContent">
+
+    <div class="container">
+        <div class="jumbotron">
+            <h2 class="display-4" th:text="${totalDeathsCases}"></h2>
+            <p class="lead text-danger">Total Death cases reported as of today.</p>
+            <hr class="my-3">
+
+            <p class="lead">
+                <span>Deaths cases reported since previous day:</span>
+                <span class="text-danger" th:text="${totalNewCases}"></span>
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <input class="form-control" placeholder="Search Country..."
+               aria-describedby="button-addon2" type="text" id="myInput">
+        <br>
+
+        </form>
+
+        <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+            <table class="table table-bordered table-striped ">
+                <thead>
+                <tr class="table-danger text-secondary">
+                    <th class="th-sm">State</th>
+                    <th class="th-sm">Country</th>
+                    <th class="th-sm">Total Death Cases</th>
+                    <th class="th-sm">Changes since last day</th>
+                </tr>
+                </thead>
+                <tbody id="myTable">
+                <tr th:each="allDeaths : ${AllDeaths}">
+                    <td th:text="${allDeaths.state}"></td>
+                    <td th:text="${allDeaths.country}"></td>
+                    <td th:text="${allDeaths.latestDeathsCases}">0</td>
+                    <td th:text="${allDeaths.diffFromPrevDay}">0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</div>
+</body>
+</html>
