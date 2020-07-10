@@ -8,19 +8,74 @@
 </head>
 <body>
 <div layout:fragment="pageContent">
+    <div class="row">
+        <div class="col-sm-6" style="margin-bottom:30px">
+            <div class="jumbotron">
+                <div class="container-fluid">
+                    <h4 class="display-4" th:text="${totalInfectedCases}"></h4>
+                    <p class="lead text-warning">Total cases reported as of today.</p>
+                    <hr class="my-3">
 
-    <div class="jumbotron">
-        <div class="container-fluid">
-            <h2 class="display-4" th:text="${totalInfectedCases}"></h2>
-            <p class="lead text-warning">Total cases reported as of today.</p>
-            <hr class="my-3">
-
-            <p class="lead">
-                <span>Infected cases reported since previous day:</span>
-                <span class="text-warning" th:text="${totalNewCases}"></span>
-            </p>
+                    <p>
+                        <span>Infected cases reported since previous day:</span>
+                        <span class="text-warning" th:text="${totalNewCases}"></span>
+                    </p>
+                </div>
+            </div>
         </div>
+        <div class="col-md-6">
+            <div id="container" style="min-width: 310px; height: 350px; margin: 0 auto"></div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/data.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script th:inline="javascript">
+            $(function () {
+                Highcharts.chart('container', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Total Infected Cases'
+                    },
+                    subtitle: {
+                        text: 'Outbreak since 22-Jan-2020 till 30-Jun-2020'
+                    },
+                    xAxis: {
+                        categories: [[${monthsCases.keySet()}]],
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Number of infected[K]'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                            '<td style="padding:0"><b>{point.y:.1f} cases</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'infected per month',
+                        data: [[${monthsCases.values()}]]
+
+                    }]
+                });
+            });
+        </script>
     </div>
+
 
     <div class="container">
 
@@ -32,10 +87,10 @@
             <table class="table table-bordered table-striped ">
                 <thead>
                 <tr class="table-warning text-secondary ">
-                    <th >State</th>
-                    <th >Country</th>
-                    <th >Total Infected Cases </th>
-                    <th >Changes since last day</th>
+                    <th>State</th>
+                    <th>Country</th>
+                    <th>Total Infected Cases</th>
+                    <th>Changes since last day</th>
                 </tr>
                 </thead>
                 <tbody id="myTable">

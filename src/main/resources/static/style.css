@@ -42,10 +42,9 @@ a, a:hover, a:focus {
     height: 100%;
 }
 .list-group-item {
-    text-align: center;
-    padding: 60px;
-    height: 100%;
-
+    padding-top: 55px;
+    padding-bottom: 55px;
+    height: 140px;
 }
 
 
@@ -71,7 +70,7 @@ a, a:hover, a:focus {
 #sidebar {
     min-width: 250px;
     max-width: 250px;
-    background: #7386D5;
+    background: #607D8B;
     color: #fff;
     transition: all 0.6s cubic-bezier(0.945, 0.020, 0.270, 0.665);
     transform-origin: bottom left;
@@ -84,7 +83,7 @@ a, a:hover, a:focus {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #6d7fcc;
+    background: #607D8B;
 }
 
 #sidebar ul.components {
@@ -104,7 +103,7 @@ a, a:hover, a:focus {
     display: block;
 }
 #sidebar ul li a:hover {
-    color: #7386D5;
+    color: #607D8B;
     background: #fff;
 }
 

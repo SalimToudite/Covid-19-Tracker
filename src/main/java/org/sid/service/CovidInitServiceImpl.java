@@ -20,6 +20,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -39,6 +40,21 @@ public class CovidInitServiceImpl implements ICovidInitService {
     private List<Infected> InfectedStats = new ArrayList<>();
     private List<Deaths> DeathsStats = new ArrayList<>();
     private List<Recovered> RecoveredStats = new ArrayList<>();
+    private HashMap<String,Long> monthInfectedData = new HashMap<>();
+    private HashMap<String,Long> monthDeathsData = new HashMap<>();
+    private HashMap<String,Long> monthRecoveredData = new HashMap<>();
+
+    public HashMap<String, Long> getMonthRecoveredData() {
+        return monthRecoveredData;
+    }
+
+    public HashMap<String, Long> getMonthDeathsData() {
+        return monthDeathsData;
+    }
+
+    public HashMap<String, Long> getMonthInfectedData() {
+        return monthInfectedData;
+    }
 
     public List<Infected> getInfectedStats() {
         return InfectedStats;
@@ -64,18 +80,41 @@ public class CovidInitServiceImpl implements ICovidInitService {
         HttpResponse<String> httpResponse = client1.send(request, HttpResponse.BodyHandlers.ofString());
         StringReader csvBodyReader = new StringReader(httpResponse.body());
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
+
+        long januaryCases=0;
+        long februaryCases=0;
+        long marchCases =0;
+        long aprilCases =0;
+        long mayCases =0;
+        long juneCases =0;
+
         for (CSVRecord record : records) {
             Infected infected = new Infected();
+
             infected.setState(record.get("Province/State"));
             infected.setCountry(record.get("Country/Region"));
-            int latestCases = Integer.parseInt(record.get(record.size() - 1));
-            int prevDayCases = Integer.parseInt(record.get(record.size() - 2));
+             int latestCases = Integer.parseInt(record.get(record.size() - 1));
+             int prevDayCases = Integer.parseInt(record.get(record.size() - 2));
+
+            januaryCases = januaryCases+ Integer.parseInt((record.get(13)));
+             februaryCases = februaryCases+ Integer.parseInt((record.get(42)));
+             marchCases = marchCases+ Integer.parseInt((record.get(73)));
+             aprilCases = aprilCases + Integer.parseInt((record.get(103)));
+             mayCases =mayCases + Integer.parseInt((record.get(134)));
+             juneCases =juneCases + Integer.parseInt((record.get(164)));
+
             infected.setLatestTotalCases(latestCases);
             infected.setDiffFromPrevDay(latestCases - prevDayCases);
             newStats.add(infected);
             infectedRepository.save(infected);
         }
         this.InfectedStats = newStats;
+        monthInfectedData.put("January",januaryCases);
+        monthInfectedData.put("February",februaryCases - januaryCases);
+        monthInfectedData.put("March",marchCases - februaryCases);
+        monthInfectedData.put("April",aprilCases - marchCases);
+        monthInfectedData.put("May",mayCases - aprilCases);
+        monthInfectedData.put("June",juneCases - mayCases);
 
     }
 
@@ -89,18 +128,38 @@ public class CovidInitServiceImpl implements ICovidInitService {
         HttpResponse<String> httpResponse = client2.send(request, HttpResponse.BodyHandlers.ofString());
         StringReader csvBodyReader = new StringReader(httpResponse.body());
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
+        long januaryCases=0;
+        long februaryCases=0;
+        long marchCases =0;
+        long aprilCases =0;
+        long mayCases =0;
+        long juneCases =0;
         for (CSVRecord record : records) {
             Deaths deaths = new Deaths();
             deaths.setState(record.get("Province/State"));
             deaths.setCountry(record.get("Country/Region"));
             int latestCases = Integer.parseInt(record.get(record.size() - 1));
             int prevDayCases = Integer.parseInt(record.get(record.size() - 2));
+
+             januaryCases= januaryCases + Integer.parseInt((record.get(13)));
+             februaryCases =februaryCases+ Integer.parseInt((record.get(42)));
+             marchCases =marchCases+ Integer.parseInt((record.get(73)));
+             aprilCases =aprilCases+ Integer.parseInt((record.get(103)));
+             mayCases =mayCases+ Integer.parseInt((record.get(134)));
+             juneCases =juneCases+ Integer.parseInt((record.get(164)));
+
             deaths.setLatestDeathsCases(latestCases);
             deaths.setDiffFromPrevDay(latestCases - prevDayCases);
             newStats.add(deaths);
             deathsRepository.save(deaths);
         }
         this.DeathsStats = newStats;
+        monthDeathsData.put("January",januaryCases);
+        monthDeathsData.put("February",februaryCases - januaryCases);
+        monthDeathsData.put("March",marchCases - februaryCases);
+        monthDeathsData.put("April",aprilCases - marchCases);
+        monthDeathsData.put("May",mayCases - aprilCases);
+        monthDeathsData.put("June",juneCases - mayCases);
 
     }
 
@@ -114,18 +173,40 @@ public class CovidInitServiceImpl implements ICovidInitService {
         HttpResponse<String> httpResponse = client3.send(request, HttpResponse.BodyHandlers.ofString());
         StringReader csvBodyReader = new StringReader(httpResponse.body());
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
+        long januaryCases=0;
+        long februaryCases=0;
+        long marchCases =0;
+        long aprilCases =0;
+        long mayCases =0;
+        long juneCases =0;
         for (CSVRecord record : records) {
             Recovered recovered = new Recovered();
             recovered.setState(record.get("Province/State"));
             recovered.setCountry(record.get("Country/Region"));
             int latestCases = Integer.parseInt(record.get(record.size() - 1));
             int prevDayCases = Integer.parseInt(record.get(record.size() - 2));
+
+             januaryCases =januaryCases+ Integer.parseInt((record.get(13)));
+             februaryCases =februaryCases+ Integer.parseInt((record.get(42)));
+             marchCases =marchCases+ Integer.parseInt((record.get(73)));
+             aprilCases =aprilCases+ Integer.parseInt((record.get(103)));
+             mayCases =mayCases+ Integer.parseInt((record.get(134)));
+             juneCases =juneCases+ Integer.parseInt((record.get(164)));
+
+
             recovered.setLatestRecoveredCases(latestCases);
             recovered.setDiffFromPrevDay(latestCases - prevDayCases);
             newStats.add(recovered);
             recoveredRepository.save(recovered);
         }
         this.RecoveredStats = newStats;
+        monthRecoveredData.put("January",januaryCases);
+        monthRecoveredData.put("February",februaryCases - januaryCases);
+        monthRecoveredData.put("March",marchCases - februaryCases);
+        monthRecoveredData.put("April",aprilCases - marchCases);
+        monthRecoveredData.put("May",mayCases - aprilCases);
+        monthRecoveredData.put("June",juneCases - mayCases);
+
 
     }
 }

@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface InfectedRepository extends MongoRepository<Infected,String> {
-   public Page<Infected> findByCountryContains(String kw, Pageable pageable);
+   public Page<Infected> findByCountryContains(String kw, Pageable  pageable);
 }

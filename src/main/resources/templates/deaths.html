@@ -9,7 +9,8 @@
 <body>
 <div layout:fragment="pageContent">
 
-    <div class="container">
+    <div class="row">
+        <div class="col-sm-6" style="margin-bottom:30px">
         <div class="jumbotron">
             <h2 class="display-4" th:text="${totalDeathsCases}"></h2>
             <p class="lead text-danger">Total Death cases reported as of today.</p>
@@ -20,7 +21,61 @@
                 <span class="text-danger" th:text="${totalNewCases}"></span>
             </p>
         </div>
+        </div>
+        <div class="col-md-6">
+            <div id="container" style="min-width: 310px; height: 350px; margin: 0 auto"></div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/data.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script th:inline="javascript">
+            $(function () {
+                Highcharts.chart('container', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Total Deaths Cases'
+                    },
+                    subtitle: {
+                        text: 'Outbreak since 22-Jan-2020 till 30-Jun-2020'
+                    },
+                    xAxis: {
+                        categories: [[${monthsCases.keySet()}]],
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Number of Deaths[K]'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                            '<td style="padding:0"><b>{point.y:.1f} cases</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Deaths per month',
+                        data: [[${monthsCases.values()}]]
+
+                    }]
+                });
+            });
+        </script>
     </div>
+
+
 
     <div class="container">
         <input class="form-control" placeholder="Search Country..."
